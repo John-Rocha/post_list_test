@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:post_list_test/features/presenter/pages/posts_page.dart';
 
 sealed class AppRoutes {
   static const String home = '/';
@@ -8,12 +8,7 @@ sealed class AppRoutes {
 
   static final routers = GoRouter(
     debugLogDiagnostics: true,
-    routes: [
-      GoRoute(
-        path: home,
-        builder:
-            (context, state) => Scaffold(appBar: AppBar(title: Text('data'))),
-      ),
-    ],
+    initialLocation: home,
+    routes: [GoRoute(path: home, builder: (context, state) => PostsPage())],
   );
 }
