@@ -41,6 +41,7 @@ dependencies:
   flex_color_scheme: ^8.1.0
   equatable: ^2.0.7
   dartz: ^0.10.1
+  formz: ^0.8.0
 
 dev_dependencies:
   flutter_test:
