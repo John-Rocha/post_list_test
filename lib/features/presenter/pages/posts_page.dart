@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:post_list_test/core/cubit/theme/theme_cubit.dart';
 import 'package:post_list_test/core/di/inject.dart';
-import 'package:post_list_test/features/presenter/cubits/post_cubit.dart';
+import 'package:post_list_test/core/router/app_routes.dart';
+import 'package:post_list_test/features/presenter/cubits/list_post/post_cubit.dart';
 import 'package:post_list_test/features/presenter/widgets/post_list.dart';
 
 class PostsPage extends StatefulWidget {
@@ -39,33 +41,49 @@ class _PostsPageState extends State<PostsPage> {
             onPressed: context.read<ThemeCubit>().toggleTheme,
           ),
           IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/create-post');
-            },
+            icon: const Icon(Icons.refresh),
+            onPressed: _postCubit.fetchPosts,
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _postCubit.fetchPosts,
 
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: BlocBuilder<PostCubit, PostState>(
-            bloc: _postCubit,
-            builder: (context, postState) {
-              return switch (postState) {
-                PostLoadingState() => Center(
-                  child: CircularProgressIndicator(),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: BlocBuilder<PostCubit, PostState>(
+          bloc: _postCubit,
+          builder: (context, postState) {
+            return switch (postState) {
+              PostLoadingState() => Center(child: CircularProgressIndicator()),
+
+              PostErrorState(:final message) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 12,
+                  children: [
+                    Text(message, style: TextStyle(fontSize: 18)),
+                    ElevatedButton(
+                      onPressed: () => _postCubit.fetchPosts(),
+                      child: const Text('Tentar novamente'),
+                    ),
+                  ],
                 ),
+              ),
 
-                PostErrorState(:final message) => Center(child: Text(message)),
-
-                PostLoadedState(:final posts) => PostList(posts: posts),
-              };
-            },
-          ),
+              PostLoadedState(:final posts) => PostList(posts: posts),
+            };
+          },
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await context.pushNamed<bool>(AppRoutes.postForm);
+
+          if (result == true) {
+            _postCubit.fetchPosts();
+          }
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
