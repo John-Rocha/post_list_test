@@ -6,7 +6,7 @@ import 'package:post_list_test/features/data/datasource/post_datasource.dart';
 import 'package:post_list_test/features/domain/entities/post_entity.dart';
 
 typedef FetchPosts = Future<Either<Exception, List<PostEntity>>>;
-typedef CreatePost = Future<Either<Exception, void>>;
+typedef CreatePost = Future<Either<Exception, PostEntity>>;
 
 abstract interface class PostRepository {
   FetchPosts fetchPosts();
@@ -36,8 +36,8 @@ final class PostRepositoryImpl implements PostRepository {
   @override
   CreatePost createPost({required String title, required String body}) async {
     try {
-      await _datasource.createPost(title: title, body: body);
-      return Right(null);
+      final post = await _datasource.createPost(title: title, body: body);
+      return Right(post);
     } on DioException catch (e, s) {
       log('Erro ao criar post', error: e, stackTrace: s);
       return Left(Exception('Erro ao criar post'));

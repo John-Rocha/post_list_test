@@ -20,7 +20,7 @@ class PostList extends StatelessWidget {
           ),
           elevation: 2,
           child: ListTile(
-            leading: Icon(Icons.article),
+            leading: CircleAvatar(child: Text(post.id.toString())),
             title: Text(post.title),
             subtitle: Text(post.body),
           ),

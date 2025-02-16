@@ -4,7 +4,7 @@ import 'package:post_list_test/features/domain/entities/post_entity.dart';
 
 abstract interface class PostDatasource {
   Future<List<PostEntity>> fetchPosts();
-  Future<void> createPost({required String title, required String body});
+  Future<PostEntity> createPost({required String title, required String body});
 }
 
 final class PostDatasourceImpl implements PostDatasource {
@@ -22,7 +22,15 @@ final class PostDatasourceImpl implements PostDatasource {
   }
 
   @override
-  Future<void> createPost({required String title, required String body}) async {
-    await _dio.post('/posts', data: {'title': title, 'body': body});
+  Future<PostEntity> createPost({
+    required String title,
+    required String body,
+  }) async {
+    final result = await _dio.post(
+      '/posts',
+      data: {'title': title, 'body': body},
+    );
+
+    return PostModel.fromMap(result.data);
   }
 }

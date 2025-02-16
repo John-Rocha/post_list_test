@@ -13,18 +13,20 @@ class PostCubit extends Cubit<PostState> {
       super(PostLoadingState());
 
   Future<void> fetchPosts() async {
+    emit(PostLoadingState());
     final result = await _postRepository.fetchPosts();
     result.fold(
       (error) => emit(PostErrorState(message: 'Erro ao buscar posts')),
-      (posts) => emit(PostLoadedState(posts: posts)),
+      (posts) => emit(PostLoadedState(posts: posts.reversed.toList())),
     );
   }
 
-  Future<void> createPost({required String title, required String body}) async {
-    final result = await _postRepository.createPost(title: title, body: body);
-    result.fold(
-      (error) => emit(PostErrorState(message: 'Erro ao criar post')),
-      (_) => fetchPosts(),
-    );
+  void addPostLocally({required PostEntity newPost}) {
+    if (state is PostLoadedState) {
+      final currentState = state as PostLoadedState;
+      final updatedPosts = List<PostEntity>.from(currentState.posts)
+        ..insert(0, newPost);
+      emit(PostLoadedState(posts: updatedPosts));
+    }
   }
 }
