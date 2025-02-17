@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:post_list_test/core/cubit/theme/theme_cubit.dart';
+import 'package:post_list_test/core/services/hive_service.dart';
 import 'package:post_list_test/features/data/datasource/post_datasource.dart';
 import 'package:post_list_test/features/domain/repositories/post_repository.dart';
 import 'package:post_list_test/features/presenter/cubits/add_post/add_post_cubit.dart';
@@ -17,6 +18,8 @@ void inject() {
     () => PostDatasourceImpl(dio: getIt<Dio>()),
   );
 
+  getIt.registerLazySingleton(() => HiveService()..init());
+
   getIt.registerLazySingleton<PostRepository>(
     () => PostRepositoryImpl(datasource: getIt<PostDatasource>()),
   );
@@ -24,7 +27,10 @@ void inject() {
   getIt.registerSingleton<ThemeCubit>(ThemeCubit());
 
   getIt.registerSingleton<PostCubit>(
-    PostCubit(postRepository: getIt<PostRepository>()),
+    PostCubit(
+      postRepository: getIt<PostRepository>(),
+      hiveService: getIt<HiveService>(),
+    ),
   );
 
   getIt.registerSingleton<AddPostCubit>(
