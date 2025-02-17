@@ -105,10 +105,4 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 ---
 
-## 📖 **Licença**
-
-Este projeto está sob a licença **MIT**.
-
----
-
 Desenvolvido com ❤️ por [Johnathan Rocha](https://github.com/John-Rocha)
