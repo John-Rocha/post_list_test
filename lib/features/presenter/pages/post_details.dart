@@ -10,38 +10,15 @@ class PostDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Detalhe')),
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              offset: Offset(0, 5),
-            ),
-          ],
-        ),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text(
-              post.title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.black,
-                fontSize: 24,
-              ),
-            ),
+            Text(post.title, style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
-            Text(
-              post.body,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.black,
-                fontSize: 18,
-              ),
-            ),
+            Text(post.body, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
       ),
