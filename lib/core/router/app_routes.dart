@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
+import 'package:post_list_test/features/domain/entities/post_entity.dart';
 import 'package:post_list_test/features/presenter/pages/add_post_page.dart';
+import 'package:post_list_test/features/presenter/pages/post_details.dart';
 import 'package:post_list_test/features/presenter/pages/posts_page.dart';
 
 sealed class AppRoutes {
@@ -17,7 +19,12 @@ sealed class AppRoutes {
         name: postForm,
         builder: (context, state) => AddPostPage(),
       ),
-      // GoRoute(path: postDetail, builder: (context, state) => Container()),
+      GoRoute(
+        path: postDetail,
+        name: postDetail,
+        builder:
+            (context, state) => PostDetails(post: state.extra as PostEntity),
+      ),
     ],
   );
 }
